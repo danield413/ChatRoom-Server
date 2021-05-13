@@ -1,2 +1,0 @@
-#message-input{height:65%;border:1px solid transparent;outline:none;border-bottom-left-radius:5px;border-top-left-radius:5px;padding-left:10px;background:#1b1b1b;color:#fff;transition:.3s ease}#message-input:focus{border:1px solid #0d6efd}#message-submit{border:none;cursor:pointer;height:65%;padding:0 15px;border-top-right-radius:5px;border-bottom-right-radius:5px}.chat{display:grid;grid-template-rows:90% 10%}#chat-input{grid-row:2/3}
-/*# sourceMappingURL=main.74fbcc47.chunk.css.map */

@@ -1,28 +1,37 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const Conversation = require('./models/conversation');
 
 const app = express();
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: process.env.URL,
     credentials: true
 }))
 
 app.use( express.static('public') );
-
-const server = require('http').createServer(app)
+const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: process.env.URL
     }
 });
 
 const conversation = new Conversation();
 
+//Routes 
+app.get('/api/get-messages', (req, res) => {
+
+    const currentMessages = conversation.historial;
+
+    res.json(currentMessages)
+})
+
+
 io.on('connection', (socket) => {
     const {id, name} = socket.handshake.query;
     conversation.connectUser(id, name)
-    io.emit('active-users', conversation.usersArray)
+    io.emit('active-users', conversation.usersArray);
 
 
     socket.on('send-message', (payload) => {
@@ -36,9 +45,8 @@ io.on('connection', (socket) => {
         io.emit('active-users', conversation.usersArray);
     });
 
-
 }) 
 
-server.listen( 5000, () => {
-    console.log(`Servidor corriendo en puerto: ${5000}`);
+server.listen( process.env.PORT, () => {
+    console.log(`Servidor corriendo en puerto: ${process.env.PORT}`);
 })
