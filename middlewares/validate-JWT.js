@@ -30,7 +30,8 @@ const validateJWT = async(req, res, next) => {
         
     } catch (error) {
         // console.log(error);
-        res.status(401).json({
+        res.json({
+            ok: false,
             msg: 'Token no válido'
         });
     }

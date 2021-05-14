@@ -11,7 +11,6 @@ class Conversation {
         this.readDB();
     }
 
-
     async postMessageOnDB( payload ) {
         await postOnDB(payload);
         await this.readDB();

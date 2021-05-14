@@ -9,6 +9,10 @@ const MessageSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'El usuario es obligatorio']
+    },
+    date: {
+        type: String,
+        required: [true, 'La fecha es obligatoria']
     }
 })
 
