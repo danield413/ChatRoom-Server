@@ -1,10 +1,10 @@
 const fs = require('fs');
+const { postOnDB, readOfDB } = require('../helpers/dbUtils');
 
 
 class Conversation {
 
     historial = [];
-    dbPath= './database/data.json';
     users = [];
     
     constructor() {
@@ -12,27 +12,14 @@ class Conversation {
     }
 
 
-    postMessageOnDB( payload ) {
-        this.readDB();
-        this.historial.push( payload );
-        this.saveDB();
+    async postMessageOnDB( payload ) {
+        await postOnDB(payload);
+        await this.readDB();
     }
 
-    saveDB() {
-        const payload = {
-            historial: this.historial
-        }
-        fs.writeFileSync(this.dbPath, JSON.stringify( payload ));
-    }
-
-    readDB() {
-        if( !fs.existsSync(this.dbPath) ) return;
-
-        const info = fs.readFileSync(this.dbPath, {
-            encoding: 'utf-8'
-        });
-        const data = JSON.parse(info);
-        this.historial = data.historial;
+    async readDB() {
+        const currentMessages = await readOfDB();
+        this.historial = currentMessages;
     }
 
     get usersArray() {
