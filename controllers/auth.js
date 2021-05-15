@@ -49,33 +49,48 @@ const loginController = async(req, res) => {
 const registerController = async (req = request, res = response) => {
 
     const { name, email, password } = req.body;
-    const user = new User({ name, email, password });
 
-    //Encriptar la contraseña
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync( password, salt )
+    try {
+        const user = new User({ name, email, password });
 
-    //Guardar en BD
-    await user.save();
+        //Encriptar la contraseña
+        const salt = bcryptjs.genSaltSync();
+        user.password = bcryptjs.hashSync( password, salt )
 
-    res.json({
-        ok: true,
-        user
-    });
+        //Guardar en BD
+        await user.save();
+        res.json({
+            ok: true,
+            user
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
+
+    
 }
 
 const renewController = async(req, res) => {
 
     const { user } = req;
 
-    //Generar nuevo JWT
-    const token = await generateJWT( user.id )
+    try {
+        //Generar nuevo JWT
+        const token = await generateJWT( user.id )
 
-    res.json({
-        ok: true,
-        user,
-        token
-    })
+        res.json({
+            ok: true,
+            user,
+            token
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        })
+    }
 
 }
 
