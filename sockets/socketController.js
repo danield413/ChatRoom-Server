@@ -8,6 +8,11 @@ const conversation = new Conversation();
 const socketController = async( socket = new Socket, io) => {
 
     const {uid, name} = socket.handshake.query;
+    if(uid === 'undefined'){
+        socket.disconnect();
+        return;
+    }
+    console.log(uid, 'nombre:', name);
     // const allUsers = await getRegisteredUsers();
     // socket.emit('res-new-user', allUsers);
 
