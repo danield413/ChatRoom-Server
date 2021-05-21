@@ -1,5 +1,7 @@
 const Message = require("../models/message");
 const MessageChat = require("../models/messageChat");
+const user = require("../models/user");
+const User = require("../models/user");
 
 const messagesController = async(req, res) => {
     
@@ -41,7 +43,29 @@ const messagesChatController = async(req, res) => {
 
 }
 
+const usersMessagesController = async (req,res) => {
+
+    const users = await User.find( {role: 'USER'} )
+    const group = users.map( async (user) => {
+        const resp = await countMessages(user._id, user.name);
+        return resp;
+    });
+
+    let groupfinal = [];
+    await Promise.all(group).then( res => groupfinal = res)
+
+    res.json(groupfinal)
+
+}
+
+const countMessages = async ( uid, name ) => {
+    const count = await Message.find( {user: uid} ).countDocuments();
+    const data = { uid: uid, name: name, count };
+    return data;
+}
+
 module.exports= {
     messagesController,
-    messagesChatController
+    messagesChatController,
+    usersMessagesController
 }

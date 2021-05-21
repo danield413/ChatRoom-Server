@@ -1,7 +1,8 @@
 const Message = require("../models/message");
 const MessageChat = require("../models/messageChat");
+const User = require("../models/user");
 
-const postOnDB = async( payload ) => {
+const postOnDB = async ( payload ) => {
     try {
 
         const message = new Message(payload);
@@ -12,7 +13,7 @@ const postOnDB = async( payload ) => {
     }
 }
 
-const postOnDBChat = async( payload, id1, id2 ) => {
+const postOnDBChat = async ( payload, id1, id2 ) => {
     try {
 
         const { message, date } = payload;
@@ -30,7 +31,7 @@ const postOnDBChat = async( payload, id1, id2 ) => {
     }
 }
 
-const readOfDB = async() => {
+const readOfDB = async () => {
     try {
         
         const messages = await Message.find().populate('user', ['_id', 'name']);
@@ -41,7 +42,7 @@ const readOfDB = async() => {
     }
 }
 
-const readChatOfDB = async(id1, id2) => {
+const readChatOfDB = async (id1, id2) => {
     try {
 
         const messagesChat = await MessageChat.find({
@@ -54,9 +55,48 @@ const readChatOfDB = async(id1, id2) => {
     }
 }
 
+const getRegisteredUsers = async () => {
+    try {
+        
+        const allUsers = await User.find({ role: 'USER' }).sort({ name : 1});
+
+        return allUsers;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const moreMessages = async () => {
+    try {
+        
+        const users = await User.find( {role: 'USER'} )
+        const group = users.map( async (user) => {
+            const resp = await countMessages(user._id, user.name);
+            return resp;
+        });
+
+        let groupfinal = [];
+        await Promise.all(group).then( res => groupfinal = res)
+
+        return groupfinal;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const countMessages = async ( uid, name ) => {
+    const count = await Message.find( {user: uid} ).countDocuments();
+    const data = { uid: uid, name: name, messages: count };
+    return data;
+}
+
 module.exports = {
     postOnDB,
     readOfDB,
     postOnDBChat,
-    readChatOfDB
+    readChatOfDB,
+    getRegisteredUsers,
+    moreMessages
 };

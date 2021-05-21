@@ -1,4 +1,5 @@
 const { Socket } = require("socket.io");
+const { getRegisteredUsers } = require("../helpers/dbUtils");
 const Conversation = require("../models/conversation");
 
 
@@ -7,16 +8,20 @@ const conversation = new Conversation();
 const socketController = async( socket = new Socket, io) => {
 
     const {uid, name} = socket.handshake.query;
+    // const allUsers = await getRegisteredUsers();
+    // socket.emit('res-new-user', allUsers);
+
     socket.join(uid);
     
     conversation.connectUser(uid, name);
     io.emit('active-users', conversation.usersArray);
 
-
     socket.on('send-message', async (payload) => {
         await conversation.postMessageOnDB(payload);
         socket.broadcast.emit('receive-messages', conversation.historial);
         io.emit('created-message', conversation.historial);
+        const stats = await conversation.getCountMessages();
+        io.emit('get-stats', stats );
     });
 
     socket.on('send-private-message', async (payload) => {
@@ -27,11 +32,20 @@ const socketController = async( socket = new Socket, io) => {
         socket.to( to ).emit('private-messages', allChatMessages);
     });
 
+    // socket.on('new-user', async (payload) => {
+    //     const allUsers = await getRegisteredUsers();
+    //     socket.broadcast.emit('res-new-user', allUsers);
+    //     socket.emit('res-new-user', allUsers);
+    // })
+    const stats = await conversation.getCountMessages();
+    socket.emit('get-stats', stats );
+
     socket.on('disconnect', () => {
         conversation.disconnectUser( uid );
         io.emit('active-users', conversation.usersArray);
     });
-    
+
+
 }
 
 module.exports = {

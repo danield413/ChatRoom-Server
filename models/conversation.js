@@ -1,12 +1,12 @@
 const fs = require('fs');
-const { postOnDB, readOfDB, postOnDBChat, readChatOfDB } = require('../helpers/dbUtils');
+const { postOnDB, readOfDB, postOnDBChat, readChatOfDB, moreMessages } = require('../helpers/dbUtils');
 
 
 class Conversation {
 
     historial = [];
     users = [];
-    chatsHistorial = []
+    chatsHistorial = [];
     
     constructor() {
         this.readDB();
@@ -30,6 +30,11 @@ class Conversation {
     async postMessageOfChatOnDB( payload, id1, id2 ) {
         await postOnDBChat( payload, id1, id2 );
         return this.readChatDB(id1, id2);
+    }
+
+    async getCountMessages() {
+        const resp = await moreMessages();
+        return resp;
     }
 
     get usersArray() {
