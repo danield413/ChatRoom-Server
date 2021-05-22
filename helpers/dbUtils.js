@@ -51,7 +51,7 @@ const readChatOfDB = async (id1, id2) => {
         return messagesChat;
 
     } catch (error) {
-        console.log(error);
+        console.log(error);  
     }
 }
 
@@ -79,7 +79,8 @@ const moreMessages = async () => {
         let groupfinal = [];
         await Promise.all(group).then( res => groupfinal = res)
 
-        return groupfinal;
+        const six = groupfinal.sort( (a,b) => b.messages - a.messages ).splice(0, 5);
+        return six;
 
     } catch (error) {
         console.log(error);

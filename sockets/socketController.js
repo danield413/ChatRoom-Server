@@ -8,13 +8,14 @@ const conversation = new Conversation();
 const socketController = async( socket = new Socket, io) => {
 
     const {uid, name} = socket.handshake.query;
-    if(uid === 'undefined'){
+    if(uid === 'undefined' || name === 'undefined'){
         socket.disconnect();
         return;
     }
-    console.log(uid, 'nombre:', name);
-    // const allUsers = await getRegisteredUsers();
-    // socket.emit('res-new-user', allUsers);
+    if(conversation.usersArray.includes({ uid, name })){
+        socket.disconnect();
+        return;
+    }
 
     socket.join(uid);
     
@@ -37,11 +38,9 @@ const socketController = async( socket = new Socket, io) => {
         socket.to( to ).emit('private-messages', allChatMessages);
     });
 
-    // socket.on('new-user', async (payload) => {
-    //     const allUsers = await getRegisteredUsers();
-    //     socket.broadcast.emit('res-new-user', allUsers);
-    //     socket.emit('res-new-user', allUsers);
-    // })
+    const allUsers = await conversation.getRegisteredUsers()
+    socket.emit('registered-users', allUsers);
+
     const stats = await conversation.getCountMessages();
     socket.emit('get-stats', stats );
 
@@ -49,7 +48,6 @@ const socketController = async( socket = new Socket, io) => {
         conversation.disconnectUser( uid );
         io.emit('active-users', conversation.usersArray);
     });
-
 
 }
 

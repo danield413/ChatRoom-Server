@@ -22,7 +22,4 @@ router.post('/register', [
 
 router.get('/renew', validateJWT, renewController);
 
-router.get('/registered-users', validateJWT, registeredUsersController)
-
-
 module.exports = router;

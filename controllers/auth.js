@@ -35,7 +35,6 @@ const loginController = async(req, res) => {
         token
     });
 
-
 }
 
 const registerController = async (req = request, res = response) => {
@@ -100,29 +99,8 @@ const renewController = async(req, res) => {
 
 }
 
-const registeredUsersController = async (req, res) => {
-
-    try {
-        
-        const allUsers = await User.find({ role: 'USER' }).sort({ name : 1});
-
-        res.json({
-            ok: true,
-            allUsers
-        })
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            msg: 'Hable con el administrador'
-        })
-    }
-
-}
-
 module.exports = {
     loginController,
     registerController,
     renewController,
-    registeredUsersController
 }

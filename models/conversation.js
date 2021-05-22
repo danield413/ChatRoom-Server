@@ -1,5 +1,11 @@
-const fs = require('fs');
-const { postOnDB, readOfDB, postOnDBChat, readChatOfDB, moreMessages } = require('../helpers/dbUtils');
+const { 
+    postOnDB, 
+    readOfDB, 
+    postOnDBChat, 
+    readChatOfDB, 
+    moreMessages 
+} = require('../helpers/dbUtils');
+const User = require('./user');
 
 
 class Conversation {
@@ -35,6 +41,11 @@ class Conversation {
     async getCountMessages() {
         const resp = await moreMessages();
         return resp;
+    }
+
+    async getRegisteredUsers() {
+        const allUsers = await User.find({ role: 'USER' }).sort({ name : 1});
+        return allUsers;
     }
 
     get usersArray() {
