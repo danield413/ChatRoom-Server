@@ -1,5 +1,4 @@
 const { Socket } = require("socket.io");
-const { getRegisteredUsers } = require("../helpers/dbUtils");
 const Conversation = require("../models/conversation");
 
 
@@ -17,8 +16,6 @@ const socketController = async( socket = new Socket, io) => {
         return;
     }
 
-    socket.join(uid);
-    
     conversation.connectUser(uid, name);
     io.emit('active-users', conversation.usersArray);
 
