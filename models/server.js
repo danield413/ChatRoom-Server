@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { socketController } = require('../sockets/socketController');
 const { dbConnection } = require('../database/config');
+const path = require('path');
 
 class Server {
     constructor() {
