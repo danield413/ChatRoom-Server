@@ -12,7 +12,7 @@ class Server {
         this.server = require('http').createServer( this.app );
         this.io = require('socket.io')(this.server, {
             cors: {
-                origin: 'http://localhost:3000' || 'https://room-chat-dan.herokuapp.com',
+                origin: process.env.URL,
                 methods: ["GET", "POST"],
                 credentials: true
             }
