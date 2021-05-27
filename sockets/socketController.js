@@ -31,7 +31,7 @@ const socketController = async( socket = new Socket, io) => {
         const to = payload[1].uid;
         const message = payload[0];
         const allChatMessages  = await conversation.postMessageOfChatOnDB(message, uid, to);
-        socket.emit('private-messages', allChatMessages );
+        io.emit('private-messages', allChatMessages );
         socket.to( to ).emit('private-messages', allChatMessages);
     });
 
