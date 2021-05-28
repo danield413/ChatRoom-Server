@@ -5,7 +5,7 @@ const messagesController = async(req, res) => {
     
     try {
 
-        const messages = await Message.find().populate('user', ['_id', 'name']);
+        const messages = await Message.find().populate('user', ['_id', 'name']).limit(20);
 
         res.json({
             messages
