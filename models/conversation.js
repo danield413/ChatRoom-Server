@@ -10,11 +10,11 @@ const User = require('./user');
 
 class Conversation {
 
-    historial = [];
-    users = [];
-    chatsHistorial = [];
-    
     constructor() {
+        this.historial = [];
+        this.users = [];
+        this.chatsHistorial = [];
+
         this.readDB();
     }
 

@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcryptjs = require('bcryptjs');
 
 const { generateJWT } = require("../helpers/generateJWT");
+const { googleVerify } = require("../helpers/googleVerify");
 
 const loginController = async(req, res) => {
    
@@ -99,8 +100,53 @@ const renewController = async(req, res) => {
 
 }
 
+const googleController = async (req,res) => {
+    
+    const { id_token } = req.body;
+
+    try {
+        
+        const {name, email} = await googleVerify(id_token);
+
+        let user = await User.findOne({ email });
+        
+        if( !user ) {
+            //Tengo que crearlo
+            const data = {
+                name,
+                email,
+                password: 'No tiene, es de Google',
+                role: 'USER',
+                google: true
+            };
+
+            user = new User( data );
+            await user.save();
+        }
+
+        //Generar el JWT
+        const token = await generateJWT( user.id );
+    
+        res.json({
+            uid: user.id,
+            name: user.name,
+            email: user.email,
+            google: user.google,
+            token
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        })
+    }
+
+}
+
 module.exports = {
     loginController,
     registerController,
     renewController,
+    googleController
 }

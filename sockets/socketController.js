@@ -18,6 +18,7 @@ const socketController = async( socket = new Socket, io) => {
 
     conversation.connectUser(uid, name);
     io.emit('active-users', conversation.usersArray);
+    socket.emit('receive-messages', conversation.historial);
 
     socket.on('send-message', async (payload) => {
         await conversation.postMessageOnDB(payload);
