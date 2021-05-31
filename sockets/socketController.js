@@ -7,7 +7,13 @@ const conversation = new Conversation();
 const socketController = async( socket = new Socket, io) => {
 
     const {uid, name} = socket.handshake.query;
+
+    //Desconectar posibles usuarios fallidos y/o repetidos
     if(uid === 'undefined' || name === 'undefined'){
+        socket.disconnect();
+        return;
+    }
+    if(uid === 'null' || name === 'null'){
         socket.disconnect();
         return;
     }
