@@ -6,9 +6,9 @@ const googleVerify = async ( idToken ) => {
 
     const ticket = await client.verifyIdToken({ idToken, audience: '257430794857-ifhr62u2i59t0snq8a3q4gns6k8or9a6.apps.googleusercontent.com' });
 
-    const { name, email } = ticket.getPayload();
+    const { name, email, picture} = ticket.getPayload();
     
-    return { name, email };
+    return { name, email, picture };
 
 }
 

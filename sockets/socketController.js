@@ -6,7 +6,7 @@ const conversation = new Conversation();
 
 const socketController = async( socket = new Socket, io) => {
 
-    const {uid, name} = socket.handshake.query;
+    const {uid, name, picture} = socket.handshake.query;
 
     //Desconectar posibles usuarios fallidos y/o repetidos
     if(uid === 'undefined' || name === 'undefined'){
@@ -21,8 +21,8 @@ const socketController = async( socket = new Socket, io) => {
         socket.disconnect();
         return;
     }
-
-    conversation.connectUser(uid, name);
+    
+    conversation.connectUser(uid, name, picture);
     io.emit('active-users', conversation.usersArray);
     socket.emit('receive-messages', conversation.historial);
 

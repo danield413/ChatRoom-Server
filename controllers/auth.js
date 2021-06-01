@@ -106,7 +106,7 @@ const googleController = async (req,res) => {
 
     try {
         
-        const {name, email} = await googleVerify(id_token);
+        const { name, email, picture } = await googleVerify(id_token);
 
         let user = await User.findOne({ email });
         
@@ -115,6 +115,7 @@ const googleController = async (req,res) => {
             const data = {
                 name,
                 email,
+                picture,
                 password: 'No tiene, es de Google',
                 role: 'USER',
                 google: true
@@ -130,6 +131,7 @@ const googleController = async (req,res) => {
         res.json({
             uid: user.id,
             name: user.name,
+            picture: user.picture,
             email: user.email,
             google: user.google,
             token

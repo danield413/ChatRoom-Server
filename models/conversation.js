@@ -52,8 +52,12 @@ class Conversation {
         return this.users;
     }
 
-    connectUser( id, name ){
-        this.users.unshift({ id, name});
+    connectUser( id, name, picture ){
+        if(picture) {
+            this.users.unshift({ id, name, picture });
+        } else {
+            this.users.unshift({ id, name, picture: null });
+        }
     }
 
     disconnectUser( id ){

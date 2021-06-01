@@ -10,7 +10,7 @@ const UserSchema = Schema({
         required: [true, 'El correo es obligatorio'],
         unique: true
     },
-    img: {
+    picture: {
         type: String,
         default: null
     },
