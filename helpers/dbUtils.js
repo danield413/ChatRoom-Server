@@ -79,7 +79,7 @@ const moreMessages = async () => {
         let groupfinal = [];
         await Promise.all(group).then( res => groupfinal = res)
 
-        const six = groupfinal.sort( (a,b) => b.messages - a.messages ).splice(0, 5);
+        const six = groupfinal.sort( (a,b) => b.messages - a.messages ).splice(0, 3);
         return six;
 
     } catch (error) {
