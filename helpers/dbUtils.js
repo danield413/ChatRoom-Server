@@ -34,7 +34,7 @@ const postOnDBChat = async ( payload, id1, id2 ) => {
 const readOfDB = async () => {
     try {
         
-        const messages = await Message.find().populate('user', ['_id', 'name']).limit(20);
+        const messages = await Message.find().populate('user', ['_id', 'name']);
         return messages
 
     } catch (error) {
